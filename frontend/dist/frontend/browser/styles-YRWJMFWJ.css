@@ -1,1 +1,0 @@
-@tailwind base;@tailwind components;@tailwind utilities;body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif}@layer utilities{.animate-border-glow{animation:border-glow 2s ease-in-out infinite}}@keyframes border-glow{0%,to{box-shadow:0 0 5px #3b82f680}50%{box-shadow:0 0 20px #3b82f6cc}}
