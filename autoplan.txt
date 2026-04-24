@@ -1,0 +1,7 @@
+=== /autoplan ===
+Deliverable: Technical specification document
+- Architecture: Angular SPA + Springboot REST APIs + MySQL
+- Database schema: tickets table (id, name, description, status)
+- API endpoints: GET /tickets, POST /tickets, PUT /tickets/{id}, DELETE /tickets/{id}
+- UI pages: Dashboard, Create Ticket, Update Ticket, Delete Ticket, Search
+- Tech: Tailwind CSS, minimal theme, no authentication

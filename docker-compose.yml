@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: ticket_mysql_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ticket_system
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpassword
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./dbschema.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db_data:
