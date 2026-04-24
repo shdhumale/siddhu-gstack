@@ -1,0 +1,5 @@
+=== /office-hours ===
+Deliverable: Initial alignment meeting notes
+- Confirm scope: Ticket CRUD (Create, Read, Update, Delete) without authentication
+- Confirm tech stack: Angular frontend, Springboot microservice, MySQL backend
+- Confirm target: Browser-based simple ticket management for small teams

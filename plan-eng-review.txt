@@ -1,0 +1,7 @@
+=== /plan-eng-review ===
+Deliverable: Engineering implementation plan
+- Frontend: Angular components for Dashboard, Create, Update, Delete, Search
+- Backend: Springboot REST controllers and MySQL integration
+- Database: SQL schema creation script
+- Implementation: 5 tabs/sections matching UI design requirements
+- Styling: Tailwind CSS with animations for table borders and button clarity

@@ -1,0 +1,82 @@
+## Product Requirements Document (PRD): Simple Ticket Management System
+
+**Version:** 1.0  
+**Status:** Draft  
+**Date:** April 24, 2026
+
+---
+
+### 1. Executive Summary
+The goal is to raise a CR for addinging Create, Update and deleted Functionality on the UI and Back end side for browser-based Ticket Management System using Angular and Front end, Sprongboot as Micrservice middleware and MySQL and Back end. This tool is designed for simplicity, allowing users to securely log in and view, create, upate, delete and search for tickets with a JWT-based authentication system.
+
+---
+
+### 2. Target Audience
+* Small teams needing a quick internal tracking tool.
+* Users looking for a "no-fuss" organizational interface.
+
+---
+
+### 3. Functional Requirements
+
+#### 3.1 Dashboard (Landing Page)
+* **Purpose:** Provide an overview of all existing tickets.
+* **Display:** A table format containing the following columns:
+    * **ID:** Unique identifier for the ticket.
+    * **Name:** Short title of the issue.
+    * **Description:** Detailed explanation.
+    * **Status:** Current state (New, Assigned, Done, or Escalate).
+
+#### 3.2 Create New Ticket
+* **Purpose:** Allow users to add new entries to the system.
+* **Input Fields:**
+    * Ticket ID (Auto-generated or manual entry).
+    * Name of Ticket (Text input).
+    * Description (Text area).
+    * Status (Dropdown selection: New, Assigned, Done, Escalate).
+* **Action:** A "Save" button to commit the data.
+
+
+#### 3.3 Update existing Ticket
+* **Purpose:** Allow users to update existing entries to the system.
+* **Input Fields:**
+    * Ticket ID (Auto-generated or manual entry).
+    * Name of Ticket (Text input).
+    * Description (Text area).
+    * Status (Dropdown selection: New, Assigned, Done, Escalate).
+* **Action:** A "Update" button to commit the data.
+
+
+#### 3.4 Delete existing Ticket
+* **Purpose:** Allow users to update existing entries to the system.
+* **Input Fields:**
+    * Ticket ID (Auto-generated or manual entry).
+    * Name of Ticket (Text input).
+    * Description (Text area).
+    * Status (Dropdown selection: New, Assigned, Done, Escalate).
+* **Action:** A "Delete" button to delete the data.
+
+---
+
+### 4. Data Architecture
+* **Storage:** For this phase, data will stored in MySQL Database.
+* **Note on Implementation:**  Create sql script of the schema and table and run it on the MySQL database.
+
+---
+
+### 5. User Interface (UI) Design
+* **Theme:** Minimalist and clean.
+* **Navigation:** Simple tabs or a navigation bar to toggle between **Dashboard**, **Search**, **Create**, **Update** and **Delete**.
+* **Styling:** use Tailwind CSS along with animation for table borders, padding, and button clarity.
+
+---
+
+### 6. Technical Stack
+* **Frontend:** Angular
+* **Middleware:** Springboot Microservice.
+* **Backend:** MySQL Database.
+---
+
+### 7. Constraints & Out of Scope
+* **Authentication Required:** Secure JWT-based login required, ensuring team tracking visibility.
+* **Team Ready:** Designed for multi-user deployment over a network.
