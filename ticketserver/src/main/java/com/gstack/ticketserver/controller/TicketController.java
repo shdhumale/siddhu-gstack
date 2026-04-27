@@ -28,6 +28,14 @@ public class TicketController {
         return ResponseEntity.ok(ticketRepository.findAll());
     }
 
+    @SuppressWarnings("null")
+    @GetMapping("/{id}")
+    public ResponseEntity<Ticket> getTicketById(@PathVariable Long id) {
+        return ticketRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticketRequest) {
         Ticket t = new Ticket();
