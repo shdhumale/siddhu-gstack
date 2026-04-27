@@ -1,10 +1,6 @@
 package com.gstack.ticketserver.controller;
 
 import com.gstack.ticketserver.model.Ticket;
-import com.gstack.ticketserver.model.User;
-import com.gstack.ticketserver.repository.TicketRepository;
-import com.gstack.ticketserver.repository.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,12 +15,19 @@ import java.util.List;
 public class TicketController {
 
     @Autowired
-    private TicketRepository ticketRepository;
+    private com.gstack.ticketserver.repository.TicketRepository ticketRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    private com.gstack.ticketserver.security.JwtUtils jwtUtils;
 
     @GetMapping
     public ResponseEntity<List<Ticket>> getAllTickets() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null
+                && authentication.getPrincipal() instanceof com.gstack.ticketserver.security.UserDetailsImpl) {
+            Long userId = ((com.gstack.ticketserver.security.UserDetailsImpl) authentication.getPrincipal()).getId();
+            return ResponseEntity.ok(ticketRepository.findByUserId(userId));
+        }
         return ResponseEntity.ok(ticketRepository.findAll());
     }
 
@@ -34,11 +37,16 @@ public class TicketController {
         t.setName(ticketRequest.getName());
         t.setDescription(ticketRequest.getDescription());
         t.setStatus(ticketRequest.getStatus() != null ? ticketRequest.getStatus() : Ticket.Status.New);
-        // how to get userid in this method
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
-        t.setUserId(user.getId());
+        if (authentication != null
+                && authentication.getPrincipal() instanceof com.gstack.ticketserver.security.UserDetailsImpl) {
+            Long userId = ((com.gstack.ticketserver.security.UserDetailsImpl) authentication.getPrincipal()).getId();
+            t.setUserId(userId);
+        } else {
+            return ResponseEntity.status(401).build();
+        }
+
         return ResponseEntity.ok(ticketRepository.save(t));
     }
 
@@ -49,14 +57,9 @@ public class TicketController {
                     ticket.setName(ticketDetails.getName());
                     ticket.setDescription(ticketDetails.getDescription());
                     ticket.setStatus(ticketDetails.getStatus());
-                    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                    String email = authentication.getName();
-                    User user = userRepository.findByEmail(email)
-                            .orElseThrow(() -> new RuntimeException("User not found"));
-                    ticket.setUserId(user.getId());
                     return ResponseEntity.ok(ticketRepository.save(ticket));
                 })
-                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
@@ -66,6 +69,6 @@ public class TicketController {
                     ticketRepository.delete(ticket);
                     return ResponseEntity.ok().build();
                 })
-                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+                .orElse(ResponseEntity.notFound().build());
     }
 }

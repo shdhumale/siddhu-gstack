@@ -22,6 +22,14 @@ export class AuthService {
     );
   }
 
+  register(userData: any) {
+    return this.http.post<any>('http://localhost:8080/auth/register', userData);
+  }
+
+  updatePassword(passwordData: any) {
+    return this.http.post<any>('http://localhost:8080/auth/update-password', passwordData);
+  }
+
   logout() {
     localStorage.removeItem('jwtToken');
     this.tokenSubject.next(null);

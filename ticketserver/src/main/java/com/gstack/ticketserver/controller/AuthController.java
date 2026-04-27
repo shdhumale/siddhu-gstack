@@ -42,6 +42,12 @@ public class AuthController {
         }
     }
 
+    public static class UpdatePasswordRequest {
+        public String email;
+        public String oldPassword;
+        public String newPassword;
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -65,5 +71,19 @@ public class AuthController {
 
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully!");
+    }
+
+    @PostMapping("/update-password")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequest updateRequest) {
+        return userRepository.findByEmail(updateRequest.email)
+                .map(user -> {
+                    if (!encoder.matches(updateRequest.oldPassword, user.getPasswordHash())) {
+                        return ResponseEntity.badRequest().body("Error: Current password is incorrect!");
+                    }
+                    user.setPasswordHash(encoder.encode(updateRequest.newPassword));
+                    userRepository.save(user);
+                    return ResponseEntity.ok("Password updated successfully!");
+                })
+                .orElse(ResponseEntity.badRequest().body("Error: User not found!"));
     }
 }

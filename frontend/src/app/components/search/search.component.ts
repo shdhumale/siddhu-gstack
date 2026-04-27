@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
       <h1 class="text-2xl font-bold text-gray-900">Search Tickets</h1>
       
       <div class="relative">
-        <input type="text" [(ngModel)]="searchQuery" (input)="filterTickets()"
+        <input type="text" [(ngModel)]="searchQuery"
           class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="Search by name or description...">
         <svg class="absolute left-4 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -29,6 +29,7 @@ import { RouterLink } from '@angular/router';
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -49,6 +50,10 @@ import { RouterLink } from '@angular/router';
                     [class.text-red-800]="ticket.status === 'Escalate'">
                     {{ ticket.status }}
                   </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
+                  <a [routerLink]="['/edit', ticket.id]" class="text-blue-600 hover:text-blue-900">Edit</a>
+                  <button (click)="deleteTicket(ticket.id!)" class="text-red-600 hover:text-red-900">Delete</button>
                 </td>
               </tr>
             } @empty {
@@ -78,11 +83,22 @@ export class SearchComponent implements OnInit {
   constructor(private ticketService: TicketService) {}
 
   ngOnInit() {
+    this.loadTickets();
+  }
+
+  loadTickets() {
     this.ticketService.getTickets().subscribe({
       next: (data) => this.tickets.set(data),
       error: (err) => console.error('Failed to load tickets', err)
     });
   }
 
-  filterTickets() {}
+  deleteTicket(id: number) {
+    if (confirm('Are you sure you want to delete this ticket?')) {
+      this.ticketService.deleteTicket(id).subscribe({
+        next: () => this.loadTickets(),
+        error: (err) => console.error('Failed to delete ticket', err)
+      });
+    }
+  }
 }

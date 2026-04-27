@@ -7,6 +7,7 @@ export interface Ticket {
   name: string;
   description: string;
   status: 'New' | 'Assigned' | 'Done' | 'Escalate';
+  version?: number;
 }
 
 @Injectable({
@@ -21,6 +22,10 @@ export class TicketService {
 
   getTickets(): Observable<Ticket[]> {
     return this.http.get<Ticket[]>(this.baseUrl);
+  }
+
+  getTicket(id: number): Observable<Ticket> {
+    return this.http.get<Ticket>(`${this.baseUrl}/${id}`);
   }
 
   createTicket(ticket: Omit<Ticket, 'id'>): Observable<Ticket> {

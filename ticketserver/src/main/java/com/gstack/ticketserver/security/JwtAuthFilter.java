@@ -27,7 +27,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.startsWith("/api/tickets") || path.startsWith("/auth/");
+        return path.startsWith("/auth/");
     }
 
     @Override
@@ -38,12 +38,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String jwt = parseJwt(request);
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String email = jwtUtils.getUserNameFromJwtToken(jwt);
+                Long userId = jwtUtils.getUserIdFromJwtToken(jwt);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                // Store userId in security context for easy access
+                com.gstack.ticketserver.model.User user = new com.gstack.ticketserver.model.User();
+                user.setId(userId);
+                user.setEmail(email);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }

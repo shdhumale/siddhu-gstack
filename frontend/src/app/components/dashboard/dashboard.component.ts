@@ -47,7 +47,7 @@ import { RouterLink } from '@angular/router';
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm space-x-2">
-                  <button (click)="editTicket(ticket)" class="text-blue-600 hover:text-blue-900">Edit</button>
+                  <a [routerLink]="['/edit', ticket.id]" class="text-blue-600 hover:text-blue-900">Edit</a>
                   <button (click)="deleteTicket(ticket.id!)" class="text-red-600 hover:text-red-900">Delete</button>
                 </td>
               </tr>
@@ -76,10 +76,6 @@ export class DashboardComponent implements OnInit {
       next: (data) => this.tickets.set(data),
       error: (err) => console.error('Failed to load tickets', err)
     });
-  }
-
-  editTicket(ticket: Ticket) {
-    console.log('Edit ticket', ticket);
   }
 
   deleteTicket(id: number) {

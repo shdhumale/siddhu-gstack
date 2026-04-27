@@ -1,5 +1,6 @@
 package com.gstack.ticketserver.security;
 
+import com.gstack.ticketserver.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +25,14 @@ public class JwtUtils {
 
     public String generateJwtToken(Authentication authentication) {
         String username = authentication.getName();
+
+        // Get the User object from authentication principal
+        User user = ((UserDetailsImpl) authentication.getPrincipal()).getUser();
+
         return Jwts.builder()
                 .setSubject(username)
+                .claim("userId", user.getId())
+                .claim("email", username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -39,6 +46,15 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
+    }
+
+    public Long getUserIdFromJwtToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Long.class);
     }
 
     public boolean validateJwtToken(String authToken) {
