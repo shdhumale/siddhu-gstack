@@ -13,7 +13,7 @@ export interface Ticket {
   providedIn: 'root'
 })
 export class TicketService {
-  private baseUrl = 'http://localhost:8080/api/tickets';
+  private baseUrl = 'http://localhost:8080/tickets';
   private ticketsSubject = new BehaviorSubject<Ticket[]>([]);
   tickets$ = this.ticketsSubject.asObservable();
 
