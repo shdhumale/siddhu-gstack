@@ -45,7 +45,7 @@ export class UpdatePasswordComponent {
           setTimeout(() => this.router.navigate(['/dashboard']), 2000);
         },
         error: (err) => {
-          this.error = err.error || 'Failed to update password. Please check your credentials.';
+          this.error = err.error?.message || err.error || 'Failed to update password. Please check your credentials.';
           this.loading = false;
         }
       });

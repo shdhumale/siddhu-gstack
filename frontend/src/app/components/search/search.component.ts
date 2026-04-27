@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
       <h1 class="text-2xl font-bold text-gray-900">Search Tickets</h1>
       
       <div class="relative">
-        <input type="text" [(ngModel)]="searchQuery"
+        <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
           class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           placeholder="Search by name or description...">
         <svg class="absolute left-4 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ import { RouterLink } from '@angular/router';
               </tr>
             } @empty {
               <tr>
-                <td colspan="4" class="px-6 py-12 text-center text-gray-500">No tickets match your search.</td>
+                <td colspan="5" class="px-6 py-12 text-center text-gray-500">No tickets match your search.</td>
               </tr>
             }
           </tbody>
@@ -69,14 +69,14 @@ import { RouterLink } from '@angular/router';
 })
 export class SearchComponent implements OnInit {
   tickets = signal<Ticket[]>([]);
-  searchQuery = '';
+  searchQuery = signal('');
   
   filteredTickets = computed(() => {
-    const query = this.searchQuery.toLowerCase();
+    const query = this.searchQuery().toLowerCase();
     if (!query) return this.tickets();
     return this.tickets().filter(t => 
-      t.name.toLowerCase().includes(query) || 
-      t.description.toLowerCase().includes(query)
+      (t.name?.toLowerCase().includes(query)) || 
+      (t.description?.toLowerCase().includes(query))
     );
   });
 

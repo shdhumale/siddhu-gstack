@@ -38,7 +38,7 @@ export class RegisterComponent {
           setTimeout(() => this.router.navigate(['/login']), 2000);
         },
         error: (err) => {
-          this.error = err.error || 'Registration failed. Please try again.';
+          this.error = err.error?.message || err.error || 'Registration failed. Please try again.';
           this.loading = false;
         }
       });

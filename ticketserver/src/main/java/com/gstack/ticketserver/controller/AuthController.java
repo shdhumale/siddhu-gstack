@@ -56,13 +56,13 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        return ResponseEntity.ok(new JwtResponse(jwt));
+        return ResponseEntity.ok(java.util.Map.of("token", jwt));
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody LoginRequest signUpRequest) {
         if (userRepository.findByEmail(signUpRequest.email).isPresent()) {
-            return ResponseEntity.badRequest().body("Error: Email is already in use!");
+            return ResponseEntity.badRequest().body(java.util.Map.of("message", "Error: Email is already in use!"));
         }
 
         User user = new User();
@@ -70,7 +70,7 @@ public class AuthController {
         user.setPasswordHash(encoder.encode(signUpRequest.password));
 
         userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.ok(java.util.Map.of("message", "User registered successfully!"));
     }
 
     @PostMapping("/update-password")
@@ -78,12 +78,13 @@ public class AuthController {
         return userRepository.findByEmail(updateRequest.email)
                 .map(user -> {
                     if (!encoder.matches(updateRequest.oldPassword, user.getPasswordHash())) {
-                        return ResponseEntity.badRequest().body("Error: Current password is incorrect!");
+                        return ResponseEntity.badRequest()
+                                .body(java.util.Map.of("message", "Error: Current password is incorrect!"));
                     }
                     user.setPasswordHash(encoder.encode(updateRequest.newPassword));
                     userRepository.save(user);
-                    return ResponseEntity.ok("Password updated successfully!");
+                    return ResponseEntity.ok(java.util.Map.of("message", "Password updated successfully!"));
                 })
-                .orElse(ResponseEntity.badRequest().body("Error: User not found!"));
+                .orElse(ResponseEntity.badRequest().body(java.util.Map.of("message", "Error: User not found!")));
     }
 }
