@@ -17,9 +17,6 @@ public class TicketController {
     @Autowired
     private com.gstack.ticketserver.repository.TicketRepository ticketRepository;
 
-    @Autowired
-    private com.gstack.ticketserver.security.JwtUtils jwtUtils;
-
     @GetMapping
     public ResponseEntity<List<Ticket>> getAllTickets() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,6 +47,7 @@ public class TicketController {
         return ResponseEntity.ok(ticketRepository.save(t));
     }
 
+    @SuppressWarnings("null")
     @PutMapping("/{id}")
     public ResponseEntity<Ticket> updateTicket(@PathVariable Long id, @RequestBody Ticket ticketDetails) {
         return ticketRepository.findById(id)
@@ -62,6 +60,7 @@ public class TicketController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @SuppressWarnings("null")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTicket(@PathVariable Long id) {
         return ticketRepository.findById(id)
